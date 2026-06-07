@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scoreboard Lomba Cerdas Cermat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Background phoenix with fire styling */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/967012be-dff9-4851-828f-8ac0275529d0.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: "Georgia", serif;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Top bar for logos and heading */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      backdrop-filter: blur(5px);
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      margin: 20px auto;
+      max-width: 1200px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .logos {
+      display: flex;
+      gap: 1rem;
+      background: white;
+      padding: 0.6rem 1rem;
+      border-radius: 40px;
+      box-shadow: 0 0 10px rgb(255 255 255 / 0.4);
+      flex-shrink: 0;
+    }
+
+    .logos img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: contain;
+    }
+
+    .heading-text {
+      flex: 1;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      line-height: 1.3em;
+      text-shadow: 0 0 8px #000000cc;
+      user-select: none;
+    }
+
+    /* Scoreboard container with flex for three teams */
+    .scoreboard-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 2rem auto 4rem auto;
+      padding: 1rem 1rem 4rem 1rem;
+      backdrop-filter: blur(6px);
+      background-color: rgba(0, 0, 0, 0.45);
+      border-radius: 16px;
+    }
+
+    /* Each team card style */
+    .team-card {
+      background-color: #a81c17;
+      width: 320px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px #7e0700;
+      padding: 1.5rem 1.5rem 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+      position: relative;
+      transition: background-color 0.5s ease;
+    }
+
+    /* Team name style */
+    .team-name {
+      font-family: "Georgia", serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1.2rem;
+      text-shadow: 1px 1px 7px #000;
+      letter-spacing: 0.1em;
+    }
+
+    /* Score number in large font */
+    .score-value {
+      font-family: "Georgia", serif;
+      font-size: 6rem;
+      font-weight: 900;
+      margin: 1rem 0 1.5rem 0;
+      width: 100%;
+      text-align: center;
+      border-radius: 8px;
+      padding: 0.3rem 0;
+      transition: color 0.5s ease, background-color 0.5s ease;
+      user-select: text;
+      user-drag: none;
+      box-shadow: 0 0 15px #ffffff88 inset;
+    }
+
+    /* Buttons area under score */
+    .buttons-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    /* Styling + or - point buttons */
+    button.score-btn {
+      flex: 1 1 47%;
+      background-color: #1f2937;
+      color: white;
+      border-radius: 8px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      padding: 0.7rem 0;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 3px 6px #00000050;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    button.score-btn:hover {
+      background-color: #3b82f6;
+    }
+
+    /* Reset button style */
+    button.reset-btn {
+      background-color: #b91c1c;
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.9rem 0;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 0 8px #7c0a0a;
+      transition: background-color 0.4s ease;
+    }
+
+    button.reset-btn:hover {
+      background-color: #ef4444;
+    }
+
+    /* Timer container styling */
+    .timer-container {
+      max-width: 700px;
+      margin: 0 auto 3rem auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 18px;
+      padding: 1.8rem 2rem 2.5rem 2rem;
+      box-shadow: 0 0 18px #ff4400aa;
+      text-align: center;
+      font-family: "Georgia", serif;
+      user-select: none;
+    }
+
+    .timer-display {
+      font-size: 5rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-shadow: 1px 1px 15px #ff3300bb;
+      margin-bottom: 1rem;
+      color: #ffddbb;
+    }
+
+    /* Timer button styling */
+    .timer-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .timer-button {
+      background-color: #7c2d12;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 0.6rem 1.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 0 8px #a53b11;
+      user-select: none;
+    }
+
+    .timer-button:hover:not(:disabled) {
+      background-color: #d97706;
+    }
+
+    .timer-button:disabled {
+      background-color: #5a2d0a;
+      cursor: not-allowed;
+    }
+
+    /* Timer set input container */
+    .timer-set {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #ffdda1;
+      user-select: none;
+    }
+
+    input[type="number"] {
+      width: 70px;
+      font-size: 1.2rem;
+      background-color: #1f2937;
+      border: 2px solid #bb5819;
+      border-radius: 8px;
+      box-shadow: inset 0 0 6px #bb5819;
+      color: #ffdca8;
+      text-align: center;
+      padding: 0.2rem;
+      font-weight: 700;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Score colors based on value */
+    .score-positive {
+      background-color: #14532d;
+      color: #d9f99d;
+      box-shadow: 0 0 20px #a3e635 inset;
+    }
+
+    .score-zero {
+      background-color: #374151;
+      color: white;
+      box-shadow: inset 0 0 10px #9ca3af;
+    }
+
+    .score-negative {
+      background-color: #7f1d1d;
+      color: #fca5a5;
+      box-shadow: 0 0 20px #f87171 inset;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 1024px) {
+      .scoreboard-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 2.5rem;
+      }
+
+      .team-card {
+        width: 90vw;
+        max-width: 400px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top bar with logos and heading -->
+  <header class="top-bar" aria-label="Header with university logos and heading">
+    <div class="logos" aria-label="Three official logos of Universitas Pendidikan Ganesha and related organizations">
+      <img src="logo-undiksha.png" alt="Round official logo of Universitas Pendidikan Ganesha" />
+      <img src="IMG_7888 (1).PNG" alt="Round official logo of Fakultas Hukum dan Ilmu Sosial" />
+      <img src="LOGO KARISMA (2).png" alt="Round official logo of Himpunan Mahasiswa Jurusan Sejarah, Sosiologi dan Perpustakaan" />
+    </div>
+    <p class="heading-text" aria-label="Title and subtitle of the event or organizing body">
+      UNIVERSITAS PENDIDIKAN GANESHA<br />
+      FAKULTAS HUKUM DAN ILMU SOSIAL<br />
+      HIMPUNAN MAHASISWA JURUSAN <br />
+      SEJARAH, SOSIOLOGI, DAN PERPUSTAKAAN<br> </p>
+  </header>
+
+  <!-- Scoreboard container for three teams -->
+  <main class="scoreboard-container" role="main" aria-label="Scoreboard for three teams in cerdas cermat competition">
+    <!-- Team 1 -->
+    <section class="team-card" aria-labelledby="team1-name" tabindex="0">
+      <h2 id="team1-name" class="team-name"> Tim A </h2>
+      <div id="score1" class="score-value score-zero" aria-live="polite" aria-atomic="true" aria-label="Skor Tim Merah">0</div>
+      <div class="buttons-container">
+        <button class="score-btn" data-team="1" data-change="+5" aria-label="Tambah 5 poin Tim Merah">+5</button>
+        <button class="score-btn" data-team="1" data-change="+10" aria-label="Tambah 10 poin Tim Merah">+10</button>
+        <button class="score-btn" data-team="1" data-change="-5" aria-label="Kurangi 5 poin Tim Merah">-5</button>
+        <button class="score-btn" data-team="1" data-change="-10" aria-label="Kurangi 10 poin Tim Merah">-10</button>
+      </div>
+      <button class="reset-btn" data-team="1" aria-label="Reset skor Tim A ">Reset Skor</button>
+    </section>
+
+    <!-- Team 2 -->
+    <section class="team-card" aria-labelledby="team2-name" tabindex="0">
+      <h2 id="team2-name" class="team-name"> Tim B </h2>
+      <div id="score2" class="score-value score-zero" aria-live="polite" aria-atomic="true" aria-label="Skor Tim Hijau">0</div>
+      <div class="buttons-container">
+        <button class="score-btn" data-team="2" data-change="+5" aria-label="Tambah 5 poin Tim Hijau">+5</button>
+        <button class="score-btn" data-team="2" data-change="+10" aria-label="Tambah 10 poin Tim Hijau">+10</button>
+        <button class="score-btn" data-team="2" data-change="-5" aria-label="Kurangi 5 poin Tim Hijau">-5</button>
+        <button class="score-btn" data-team="2" data-change="-10" aria-label="Kurangi 10 poin Tim Hijau">-10</button>
+      </div>
+      <button class="reset-btn" data-team="2" aria-label="Reset skor Tim B ">Reset Skor</button>
+    </section>
+
+    <!-- Team 3 -->
+    <section class="team-card" aria-labelledby="team3-name" tabindex="0">
+      <h2 id="team3-name" class="team-name"> Tim C </h2>
+      <div id="score3" class="score-value score-zero" aria-live="polite" aria-atomic="true" aria-label="Skor Tim Biru">0</div>
+      <div class="buttons-container">
+        <button class="score-btn" data-team="3" data-change="+5" aria-label="Tambah 5 poin Tim Biru">+5</button>
+        <button class="score-btn" data-team="3" data-change="+10" aria-label="Tambah 10 poin Tim Biru">+10</button>
+        <button class="score-btn" data-team="3" data-change="-5" aria-label="Kurangi 5 poin Tim Biru">-5</button>
+        <button class="score-btn" data-team="3" data-change="-10" aria-label="Kurangi 10 poin Tim Biru">-10</button>
+      </div>
+      <button class="reset-btn" data-team="3" aria-label="Reset skor Tim C ">Reset Skor</button>
+    </section>
+  </main>
+
+  <!-- Timer Section -->
+  <section class="timer-container" aria-label="Timer section for lomba cerdas cermat">
+    <div class="timer-display" id="timerDisplay" aria-live="polite" aria-atomic="true" role="timer" aria-label="Timer showing remaining time">00:00</div>
+
+    <div class="timer-set" aria-label="Set timer minutes and seconds">
+      <label for="minutesInput">Menit:</label>
+      <input type="number" id="minutesInput" aria-describedby="minutesHelp" min="0" max="59" value="3" />
+      <span id="minutesHelp" class="sr-only">Masukkan nilai menit antara 0 hingga 59</span>
+
+      <label for="secondsInput">Detik:</label>
+      <input type="number" id="secondsInput" aria-describedby="secondsHelp" min="0" max="59" value="0" />
+      <span id="secondsHelp" class="sr-only">Masukkan nilai detik antara 0 hingga 59</span>
+    </div>
+
+    <div class="timer-buttons">
+      <button id="startBtn" class="timer-button" aria-label="Mulai timer">Start</button>
+      <button id="stopBtn" class="timer-button" aria-label="Berhenti timer" disabled>Stop</button>
+      <button id="resetTimerBtn" class="timer-button" aria-label="Reset timer">Reset Timer</button>
+    </div>
+  </section>
+
+  <!-- Audio alarm for timer end -->
+  <audio id="alarmSound" preload="auto" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" aria-hidden="true"></audio>
+
+  <script>
+    (() => {
+      // Scores object to store the current scores of the three teams
+      const scores = {
+        1: 0,
+        2: 0,
+        3: 0,
+      };
+
+      // Elements for scores and buttons
+      const scoreElements = {
+        1: document.getElementById("score1"),
+        2: document.getElementById("score2"),
+        3: document.getElementById("score3"),
+      };
+
+      // Update score display and change color accordingly
+      function updateScoreDisplay(team) {
+        let score = scores[team];
+        const el = scoreElements[team];
+        el.textContent = score;
+
+        // Remove all classes first
+        el.classList.remove("score-positive", "score-zero", "score-negative");
+        if (score > 0) {
+          el.classList.add("score-positive");
+        } else if (score < 0) {
+          el.classList.add("score-negative");
+        } else {
+          el.classList.add("score-zero");
+        }
+      }
+
+      // Add event listeners for scoring buttons
+      document.querySelectorAll(".score-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const team = btn.getAttribute("data-team");
+          const change = parseInt(btn.getAttribute("data-change"), 10);
+          scores[team] += change;
+          updateScoreDisplay(team);
+        });
+      });
+
+      // Reset buttons event listeners
+      document.querySelectorAll(".reset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const team = btn.getAttribute("data-team");
+          scores[team] = 0;
+          updateScoreDisplay(team);
+        });
+      });
+
+      // Initialize all scores on load
+      [1, 2, 3].forEach((team) => updateScoreDisplay(team));
+    })();
+
+    // Timer functionality
+    (() => {
+      const timerDisplay = document.getElementById("timerDisplay");
+      const startBtn = document.getElementById("startBtn");
+      const stopBtn = document.getElementById("stopBtn");
+      const resetTimerBtn = document.getElementById("resetTimerBtn");
+      const alarmSound = document.getElementById("alarmSound");
+      const minutesInput = document.getElementById("minutesInput");
+      const secondsInput = document.getElementById("secondsInput");
+
+      let timerInterval = null;
+      let remainingSeconds = 0;
+      let timerRunning = false;
+
+      // Format seconds to MM:SS
+      function formatTime(seconds) {
+        const m = Math.floor(seconds / 60)
+          .toString()
+          .padStart(2, "0");
+        const s = (seconds % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+      }
+
+      // Update the timer display
+      function updateDisplay() {
+        timerDisplay.textContent = formatTime(remainingSeconds);
+      }
+
+      // Start the timer
+      function startTimer() {
+        if (remainingSeconds <= 0) {
+          // Don't start if timer is zero
+          return;
+        }
+        if (timerRunning) return;
+        timerRunning = true;
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        minutesInput.disabled = true;
+        secondsInput.disabled = true;
+
+        timerInterval = setInterval(() => {
+          remainingSeconds--;
+          updateDisplay();
+
+          if (remainingSeconds <= 0) {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            minutesInput.disabled = false;
+            secondsInput.disabled = false;
+            alarmSound.play();
+            // Dramatic flash effect on timer
+            flashTimer();
+          }
+        }, 1000);
+      }
+
+      // Stop/pause the timer
+      function stopTimer() {
+        if (!timerRunning) return;
+        clearInterval(timerInterval);
+        timerRunning = false;
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        minutesInput.disabled = false;
+        secondsInput.disabled = false;
+      }
+
+      // Reset the timer to custom input values
+      function resetTimer() {
+        stopTimer();
+        let mins = parseInt(minutesInput.value, 10);
+        let secs = parseInt(secondsInput.value, 10);
+        if (isNaN(mins) || mins < 0) mins = 0;
+        if (isNaN(secs) || secs < 0) secs = 0;
+        if (secs > 59) secs = 59;
+        if (mins > 59) mins = 59;
+
+        remainingSeconds = mins * 60 + secs;
+        updateDisplay();
+      }
+
+      // Dramatic flash timer background when time ends
+      function flashTimer() {
+        let flashes = 0;
+        const maxFlashes = 6;
+        const flashInterval = 400;
+        let isRed = false;
+
+        const originalColor = timerDisplay.style.color;
+        const originalShadow = timerDisplay.style.textShadow;
+
+        const interval = setInterval(() => {
+          isRed = !isRed;
+          if (isRed) {
+            timerDisplay.style.color = "#ff2200";
+            timerDisplay.style.textShadow = "0 0 20px #ff3300, 0 0 30px #ff6600";
+          } else {
+            timerDisplay.style.color = "#ffddbb";
+            timerDisplay.style.textShadow = "1px 1px 15px #ff3300bb";
+          }
+
+          flashes++;
+          if (flashes > maxFlashes) {
+            clearInterval(interval);
+            timerDisplay.style.color = originalColor;
+            timerDisplay.style.textShadow = originalShadow;
+            // Optional: Could reset timer or highlight here
+          }
+        }, flashInterval);
+      }
+
+      // Initialize timer on page load
+      resetTimer();
+
+      // Event listeners for timer buttons
+      startBtn.addEventListener("click", startTimer);
+      stopBtn.addEventListener("click", stopTimer);
+      resetTimerBtn.addEventListener("click", resetTimer);
+
+      // Input validation for minutes and seconds inputs
+      minutesInput.addEventListener("input", () => {
+        if (minutesInput.value === "" || isNaN(minutesInput.value) || minutesInput.value < 0)
+          minutesInput.value = 0;
+        else if (minutesInput.value > 59) minutesInput.value = 59;
+        if (!timerRunning) resetTimer();
+      });
+
+      secondsInput.addEventListener("input", () => {
+        if (secondsInput.value === "" || isNaN(secondsInput.value) || secondsInput.value < 0)
+          secondsInput.value = 0;
+        else if (secondsInput.value > 59) secondsInput.value = 59;
+        if (!timerRunning) resetTimer();
+      });
+    })();
+  </script>
+</body>
+
+</html>
+
